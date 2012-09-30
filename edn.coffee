@@ -271,12 +271,13 @@ tokenHandlers =
 	tab:       pattern: /^\\tab$/,             action: (token) -> "\t"
 	newLine:   pattern: /^\\newline$/,         action: (token) -> "\n"
 	space:     pattern: /^\\space$/,           action: (token) -> " "
-	keyword:   pattern: /^[\:\?].*$/,              action: (token) -> token[1..-1]
+	literal:   pattern: /^[<>\?].*$/,          action: (token) -> token
+	keyword:   pattern: /^[\:].*$/,            action: (token) -> token[1..-1]
 	integer:   pattern: /^\-?[0-9]*$/,         action: (token) -> parseInt token
 	float:     pattern: /^\-?[0-9]*\.[0-9]*$/, action: (token) -> parseFloat token
 	tagged:    pattern: /^#.*$/,               action: (token) -> new Tag token[1..-1]
 
-tagActions = 
+tagActions =
 		uuid: tag: (new Tag "uuid"), action: (obj) -> obj
 		inst: tag: (new Tag "inst"), action: (obj) -> obj
 
@@ -284,25 +285,28 @@ encodeHandlers =
 	array:
 		test: (obj) -> us.isArray obj
 		action: (obj) -> "[#{(encode v for v in obj).join " "}]"
-	integer: 
+	integer:
 		test: (obj) -> tokenHandlers.integer.pattern.test "#{obj}"
 		action: (obj) -> parseInt obj
 	float:
 		test: (obj) -> tokenHandlers.float.pattern.test "#{obj}"
 		action: (obj) -> parseFloat obj
-	keyword: 
+	literal:
+		test: (obj) -> (us.isString obj) and (tokenHandlers.literal.pattern.test obj)
+		action: (obj) -> obj
+	keyword:
 		test: (obj) -> (us.isString obj) and (" " not in obj) and (tokenHandlers.keyword.pattern.test obj)
 		action: (obj) -> obj
-	string:  
+	string:
 		test: (obj) -> us.isString obj
 		action: (obj) ->  "\"#{obj.toString()}\""
-	boolean: 
+	boolean:
 		test: (obj) -> us.isBoolean obj
 		action: (obj) -> if obj then "true" else "false"
-	null:    
+	null:
 		test: (obj) -> us.isNull obj
 		action: (obj) -> "nil"
-	object:  
+	object:
 		test: (obj) -> us.isObject obj
 		action: (obj) -> 
 			result = []

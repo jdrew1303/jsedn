@@ -554,8 +554,14 @@
         return " ";
       }
     },
+    literal: {
+      pattern: /^[<>\?].*$/,
+      action: function(token) {
+        return token;
+      }
+    },
     keyword: {
-      pattern: /^[\:\?].*$/,
+      pattern: /^[\:].*$/,
       action: function(token) {
         return token.slice(1);
       }
@@ -627,6 +633,14 @@
       },
       action: function(obj) {
         return parseFloat(obj);
+      }
+    },
+    literal: {
+      test: function(obj) {
+        return (us.isString(obj)) && (tokenHandlers.literal.pattern.test(obj));
+      },
+      action: function(obj) {
+        return obj;
       }
     },
     keyword: {
