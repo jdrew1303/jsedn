@@ -271,7 +271,7 @@ tokenHandlers =
 	tab:       pattern: /^\\tab$/,             action: (token) -> "\t"
 	newLine:   pattern: /^\\newline$/,         action: (token) -> "\n"
 	space:     pattern: /^\\space$/,           action: (token) -> " "
-	literal:   pattern: /^[<>\?].*$/,          action: (token) -> token
+	literal:   pattern: /^[<>\?\$].*$/,          action: (token) -> token
 	keyword:   pattern: /^[\:].*$/,            action: (token) -> token[1..-1]
 	integer:   pattern: /^\-?[0-9]*$/,         action: (token) -> parseInt token
 	float:     pattern: /^\-?[0-9]*\.[0-9]*$/, action: (token) -> parseFloat token

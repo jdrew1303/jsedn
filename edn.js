@@ -555,7 +555,7 @@
       }
     },
     literal: {
-      pattern: /^[<>\?].*$/,
+      pattern: /^[<>\?\$].*$/,
       action: function(token) {
         return token;
       }
